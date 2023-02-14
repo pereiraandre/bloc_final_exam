@@ -15,14 +15,16 @@ class MyApp extends StatelessWidget {
 
   MyApp({super.key, required this.appRouter});
 
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<WeatherCubit>(
-          create: (BuildContext context) => WeatherCubit(),),
-        BlocProvider<MyCitiesCubit>(create: (BuildContext context) => MyCitiesCubit(),),
+          create: (BuildContext context) => WeatherCubit(),
+        ),
+        BlocProvider<MyCitiesCubit>(
+          create: (BuildContext context) => MyCitiesCubit(),
+        ),
       ],
       child: MaterialApp(
         onGenerateRoute: appRouter.onGenerateRoute,

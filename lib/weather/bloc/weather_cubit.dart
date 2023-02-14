@@ -25,16 +25,15 @@ class WeatherCubit extends Cubit<WeatherState> {
         final Weather? weather =
             await weatherServices.getCoordinates(lat, long);
 
-        List<String> isCitySaved = (await localStorage.getCity('savedCity')) != null
-            ? List<String>.from(await localStorage.getCity('savedCity'))
-            : [];
+        List<String> isCitySaved =
+            (await localStorage.getCity('savedCity')) != null
+                ? List<String>.from(await localStorage.getCity('savedCity'))
+                : [];
 
         emit(WeatherLoaded(
-          weather: weather,
-          listWeatherValues: populateWeatherList(weather),
-          isCitySaved: isCitySaved
-        ));
-
+            weather: weather,
+            listWeatherValues: populateWeatherList(weather),
+            isCitySaved: isCitySaved));
       }
     } catch (e) {
       emit(WeatherError(errorMessage: e.toString()));

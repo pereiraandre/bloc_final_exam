@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 class SavedCitiesContainer extends StatelessWidget {
   final String cityName;
-  var onPressed;
-  var delete;
+  final Function() onPressed;
+  final Function() delete;
 
-  SavedCitiesContainer({required this.delete, required this.cityName, required this.onPressed,
-    super.key}) {
+  SavedCitiesContainer(
+      {required this.delete,
+      required this.cityName,
+      required this.onPressed,
+      super.key}) {
     super.key;
   }
 
-  void showConfirmationDialog(BuildContext context) {
-
-  }
+  void showConfirmationDialog(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,8 @@ class SavedCitiesContainer extends StatelessWidget {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Confirm Delete'),
-                        content: Text('Are you sure you want to delete $cityName?'),
+                        content:
+                            Text('Are you sure you want to delete $cityName?'),
                         actions: <Widget>[
                           TextButton(
                             child: const Text('Cancel'),
@@ -60,10 +62,10 @@ class SavedCitiesContainer extends StatelessWidget {
               const Spacer(),
               Center(
                   child: Text(
-                    cityName,
-                    style: const TextStyle(
-                        fontSize: 18.0, fontWeight: FontWeight.w400),
-                  )),
+                cityName,
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.w400),
+              )),
               const Spacer(),
               IconButton(
                 padding: const EdgeInsets.only(

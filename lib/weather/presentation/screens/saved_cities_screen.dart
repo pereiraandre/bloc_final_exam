@@ -1,3 +1,4 @@
+import 'package:bloc_final_exame/utils/constants/constants.dart';
 import 'package:bloc_final_exame/weather/bloc/my_cities_cubit.dart';
 import 'package:bloc_final_exame/weather/bloc/weather_cubit.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class MySavedCities extends StatelessWidget {
           backgroundColor: Colors.transparent,
           title: const Text(
             'My Saved Cities',
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 27.0),
+            style: kTextSavedCitiesTitle,
           ),
           leading: BackButton(
             onPressed: () {

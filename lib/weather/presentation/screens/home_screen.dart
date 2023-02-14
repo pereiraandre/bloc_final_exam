@@ -1,3 +1,4 @@
+import 'package:bloc_final_exame/utils/constants/constants.dart';
 import 'package:bloc_final_exame/weather/bloc/weather_cubit.dart';
 import 'package:bloc_final_exame/weather/presentation/screens/first_screen.dart';
 import 'package:bloc_final_exame/weather/presentation/screens/loading_screen.dart';
@@ -27,11 +28,7 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 52.0),
                 child: Text(
                   'Should I go fishing?',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: kTextHomeScreenTitle
                 ),
               ),
               const SizedBox(
@@ -47,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                     Fluttertoast.showToast(
                         msg: state.errorMessage.toString(),
                         gravity: ToastGravity.CENTER);
-                    Navigator.pushNamed(context, '/saved_city_loading');
+                    Navigator.pushNamed(context, '/');
                   }
                 },
                 buildWhen: (oldState, newState) => newState is WeatherLoading,

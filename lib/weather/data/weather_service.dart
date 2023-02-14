@@ -8,20 +8,17 @@ class WeatherServices {
       WeatherServices._privateConstructor();
 
   static WeatherServices get instance => _instance;
+  NetworkHelper networkHelper = NetworkHelper.shared;
 
   Future<Weather?> getCoordinates(String lat, String long) async {
-    NetworkHelper networkHelper = NetworkHelper.shared;
-
     try {
       var response = await networkHelper.get(
         '?lat=$lat&lon=$long&appid=',
       );
-      if(response.statusCode == 200){
-        var weatherMap = response.data;
-        Weather weather = Weather.fromJson(weatherMap);
-        return weather;
-      }
-    }catch(e){
+      var weatherMap = Map<String, dynamic>.from(response);
+      Weather weather = Weather.fromJson(weatherMap);
+      return weather;
+    } catch (e) {
       rethrow;
     }
   }

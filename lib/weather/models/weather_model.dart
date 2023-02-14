@@ -8,7 +8,9 @@ class WeatherData {
 
   WeatherData(this.main);
 
-  factory WeatherData.fromJson(Map<String, dynamic> json) => _$WeatherDataFromJson(json);
+  factory WeatherData.fromJson(Map<String, dynamic> json) =>
+      _$WeatherDataFromJson(json);
+
   Map<String, dynamic> toJson() => _$WeatherDataToJson(this);
 }
 
@@ -19,10 +21,11 @@ class MainData {
   final int? seaLevel;
   final int? humidity;
 
-
   MainData(this.temp, this.humidity, this.seaLevel);
 
-  factory MainData.fromJson(Map<String, dynamic> json) => _$MainDataFromJson(json);
+  factory MainData.fromJson(Map<String, dynamic> json) =>
+      _$MainDataFromJson(json);
+
   Map<String, dynamic> toJson() => _$MainDataToJson(this);
 }
 
@@ -30,10 +33,10 @@ class MainData {
 class Wind {
   final double? speed;
 
-
   Wind(this.speed);
 
   factory Wind.fromJson(Map<String, dynamic> json) => _$WindFromJson(json);
+
   Map<String, dynamic> toJson() => _$WindToJson(this);
 }
 
@@ -46,7 +49,9 @@ class Weather {
 
   Weather(this.name, this.weather, this.main, this.wind);
 
-  factory Weather.fromJson(Map<String, dynamic> json) => _$WeatherFromJson(json);
+  factory Weather.fromJson(Map<String, dynamic> json) =>
+      _$WeatherFromJson(json);
+
   Map<String, dynamic> toJson() => _$WeatherToJson(this);
 
   String? humidityDescription() {
@@ -110,5 +115,7 @@ class Weather {
         'Let\'s get that fishing starting, and catch some douradas to your friends';
   }
 
-  bool get isBadWeather => weather[0].main != null && weather[0].main == 'Rain' || weather[0].main == 'Clouds';
+  bool get isBadWeather =>
+      weather[0].main != null && weather[0].main == 'Rain' ||
+      weather[0].main == 'Clouds';
 }

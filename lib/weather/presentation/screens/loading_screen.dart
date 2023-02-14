@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../../utils/constants/constants.dart';
 
-
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({
     Key? key,

@@ -1,3 +1,4 @@
+import 'package:bloc_final_exame/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -24,7 +25,7 @@ class SavedCitiesLoadingScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               title: const Text(
                 'My Saved Cities',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 27.0),
+                style: kTextSavedCitiesTitle,
               )),
           body: const Center(
             child: SpinKitRing(

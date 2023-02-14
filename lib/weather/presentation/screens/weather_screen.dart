@@ -10,19 +10,27 @@ class WeatherScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void showSnackBar(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ));
+    }
+
     return BlocBuilder<WeatherCubit, WeatherState>(
-      buildWhen: (oldState, newState) => newState is WeatherLoading || newState is WeatherLoaded,
+      buildWhen: (oldState, newState) =>
+          newState is WeatherLoading || newState is WeatherLoaded,
       builder: (context, state) {
         if (state is WeatherLoaded) {
-          var darkColor = state.weather?.isBadWeather ?? false
-              ? Colors.black
-              : Colors.white;
+          var weather = state.weather;
+          var darkColor =
+              weather?.isBadWeather ?? false ? Colors.black : Colors.white;
           return Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: state.weather?.isBadWeather ?? false
+                    image: weather?.isBadWeather ?? false
                         ? const AssetImage('images/bad_weather.png')
                         : const AssetImage('images/good_weather.png'),
                     fit: BoxFit.cover),
@@ -35,14 +43,12 @@ class WeatherScreen extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       leading: BackButton(
                         onPressed: () {
-                         Navigator.pushNamed(context, '/');
+                          Navigator.pushNamed(context, '/');
                         },
                         color: darkColor,
                       ),
                       title: Text(
-                        state.weather?.name == null
-                            ? 'No data'
-                            : '${state.weather?.name}',
+                        weather?.name == null ? 'No data' : '${weather?.name}',
                         style: kTextWeatherScreen.copyWith(color: darkColor),
                       ),
                       actions: [
@@ -50,26 +56,19 @@ class WeatherScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 21.0),
                           child: IconButton(
                             onPressed: () {
-                              if (state.isCitySaved?.contains(state.weather?.name) ?? false) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('This city is already saved'),
-                                        duration: Duration(seconds: 2)
-                                    )
-                                );
+                              if (state.isCitySaved?.contains(weather?.name) ??
+                                  false) {
+                                showSnackBar('This city is already saved');
                               } else {
-                                BlocProvider.of<MyCitiesCubit>(context).addCityToList(
-                                    state.weather?.name
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('Your city has been saved successfully'),
-                                        duration: Duration(seconds: 2)
-                                    ));
+                                BlocProvider.of<MyCitiesCubit>(context)
+                                    .addCityToList(weather?.name);
+                                showSnackBar(
+                                    'Your city has been saved successfully');
                               }
                             },
                             icon: const Icon(Icons.save),
-                            color: state.isCitySaved?.contains(state.weather?.name) ?? false
+                            color: state.isCitySaved?.contains(weather?.name) ??
+                                    false
                                 ? Colors.red
                                 : darkColor,
                           ),
@@ -85,18 +84,18 @@ class WeatherScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               left: 20.0, top: 68.0, right: 20),
                           child: Text(
-                            state.weather?.weather[0].main == null
+                            weather?.weather[0].main == null
                                 ? 'No data'
-                                : '${state.weather?.weather[0].main}',
+                                : '${weather?.weather[0].main}',
                             style: kTextWeatherScreen,
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
-                            state.weather?.main.temp == null
+                            weather?.main.temp == null
                                 ? 'No data'
-                                : '${state.weather?.main.temp?.toInt()}º',
+                                : '${weather?.main.temp?.toInt()}º',
                             style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 70.0,
@@ -144,7 +143,7 @@ class WeatherScreen extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(20.0),
                               child: Text(
-                                state.weather?.badWeatherDescription() ??
+                                weather?.badWeatherDescription() ??
                                     'No description available',
                                 style: const TextStyle(
                                   color: Colors.black,

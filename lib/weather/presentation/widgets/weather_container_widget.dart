@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../../utils/constants/constants.dart';
 
 class WeatherResponse extends StatelessWidget {
-  const WeatherResponse({super.key, required this.titleText, required this.value});
+  const WeatherResponse(
+      {super.key, required this.titleText, required this.value});
 
   final String titleText;
   final String value;
