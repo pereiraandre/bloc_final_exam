@@ -3,7 +3,7 @@ import 'package:bloc_final_exame/weather/bloc/my_cities_cubit.dart';
 import 'package:bloc_final_exame/weather/bloc/weather_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../widgets/saved_cities_widget.dart';
 
 class MySavedCities extends StatelessWidget {
@@ -30,6 +30,7 @@ class MySavedCities extends StatelessWidget {
           ),
           leading: BackButton(
             onPressed: () {
+              //TODO can i just pop?
               Navigator.pushNamed(context, '/');
             },
           ),
@@ -39,17 +40,19 @@ class MySavedCities extends StatelessWidget {
             Expanded(
                 child: Padding(
               padding: const EdgeInsets.only(top: 22, left: 64.0, right: 64.0),
-              child: BlocBuilder<MyCitiesCubit, MyCitiesState>(
-                bloc: BlocProvider.of<MyCitiesCubit>(context)..showCitiesList(),
-                buildWhen: (oldState, newState) =>
-                    newState is MyCitiesLoading || newState is MyCitiesLoaded,
-                builder: (context, state) {
-                  if (state is MyCitiesLoading) {
-                    return const SpinKitRing(
-                      color: Colors.white,
-                      size: 80.0,
-                    );
+              child: BlocConsumer<MyCitiesCubit, MyCitiesState>(
+                listenWhen: (oldState, newState) => newState is MyCitiesError,
+                listener: (context, state) {
+                  if (state is MyCitiesError) {
+                    Fluttertoast.showToast(
+                        msg: state.errorMessage.toString(),
+                        gravity: ToastGravity.CENTER);
+                    Navigator.pushNamed(context, '/saved_city');
                   }
+                },
+                bloc: BlocProvider.of<MyCitiesCubit>(context)..showCitiesList(),
+                buildWhen: (oldState, newState) => newState is MyCitiesLoaded,
+                builder: (context, state) {
                   if (state is MyCitiesLoaded) {
                     return ListView.separated(
                         scrollDirection: Axis.vertical,

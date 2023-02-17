@@ -10,17 +10,25 @@ class MyCitiesCubit extends Cubit<MyCitiesState> {
   final LocalStorage localStorage = LocalStorage();
 
   void showCitiesList() async {
-    List<String> savedCity = (await localStorage.getCity('savedCity')) != null
-        ? List<String>.from(await localStorage.getCity('savedCity'))
-        : [];
-    emit(MyCitiesLoaded(savedCity));
+    try {
+      List<String> savedCity = (await localStorage.getCity('savedCity')) != null
+          ? List<String>.from(await localStorage.getCity('savedCity'))
+          : [];
+      emit(MyCitiesLoaded(savedCity));
+    } catch (e) {
+      emit(MyCitiesError(e.toString()));
+    }
   }
 
   void removeCityFromList(List<String>? list, String name) {
     List<String>? newList = list;
-    newList?.remove(name);
-    localStorage.setCity("savedCity", newList!);
-    emit(MyCitiesLoaded(newList));
+    try {
+      newList?.remove(name);
+      localStorage.setCity("savedCity", newList!);
+      emit(MyCitiesLoaded(newList));
+    } catch (e) {
+      emit(MyCitiesError(e.toString()));
+    }
   }
 
   void addCityToList(String? name) async {

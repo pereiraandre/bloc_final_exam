@@ -54,8 +54,8 @@ class WeatherScreen extends StatelessWidget {
                       actions: [
                         Padding(
                           padding: const EdgeInsets.only(right: 21.0),
-                          child: IconButton(
-                            onPressed: () {
+                          child: InkWell(
+                            onTap: () {
                               if (state.isCitySaved?.contains(weather?.name) ??
                                   false) {
                                 showSnackBar('This city is already saved');
@@ -66,11 +66,26 @@ class WeatherScreen extends StatelessWidget {
                                     'Your city has been saved successfully');
                               }
                             },
-                            icon: const Icon(Icons.save),
-                            color: state.isCitySaved?.contains(weather?.name) ??
-                                    false
-                                ? Colors.red
-                                : darkColor,
+                            splashFactory: InkRipple.splashFactory,
+                            highlightColor:
+                                (state.isCitySaved?.contains(weather?.name) ??
+                                        false)
+                                    ? Colors.transparent
+                                    : Colors.green.withOpacity(0.9),
+                            splashColor:
+                                (state.isCitySaved?.contains(weather?.name) ??
+                                        false)
+                                    ? Colors.transparent
+                                    : Colors.green.withOpacity(0.9),
+                            customBorder: const CircleBorder(),
+                            child: Icon(
+                              Icons.save,
+                              color:
+                                  (state.isCitySaved?.contains(weather?.name) ??
+                                          false)
+                                      ? Colors.red
+                                      : darkColor,
+                            ),
                           ),
                         ),
                       ]),

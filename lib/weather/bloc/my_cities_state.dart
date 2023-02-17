@@ -14,7 +14,7 @@ class MyCitiesLoaded extends MyCitiesState {
 }
 
 class MyCitiesError extends MyCitiesState {
-  final String error;
+  final String errorMessage;
 
-  MyCitiesError(this.error);
+  MyCitiesError(this.errorMessage);
 }
