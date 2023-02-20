@@ -1,4 +1,3 @@
-import 'package:bloc_final_exame/weather/presentation/screens/saved_cities_loading_screen.dart';
 import 'package:bloc_final_exame/weather/presentation/screens/saved_cities_screen.dart';
 import 'package:flutter/material.dart';
 import '../weather/presentation/screens/first_screen.dart';
@@ -19,9 +18,6 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoadingScreen());
       case '/saved_city':
         return MaterialPageRoute(builder: (_) => const MySavedCities());
-      case '/saved_city_loading':
-        return MaterialPageRoute(
-            builder: (_) => const SavedCitiesLoadingScreen());
       default:
         return null;
     }

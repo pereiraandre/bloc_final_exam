@@ -1,4 +1,5 @@
 import 'package:bloc_final_exame/utils/constants/constants.dart';
+import 'package:bloc_final_exame/weather/bloc/my_cities_cubit.dart';
 import 'package:bloc_final_exame/weather/bloc/weather_cubit.dart';
 import 'package:bloc_final_exame/weather/presentation/screens/first_screen.dart';
 import 'package:bloc_final_exame/weather/presentation/screens/loading_screen.dart';
@@ -26,32 +27,33 @@ class HomeScreen extends StatelessWidget {
             children: [
               const Padding(
                 padding: EdgeInsets.only(top: 52.0),
-                child: Text(
-                  'Should I go fishing?',
-                  style: kTextHomeScreenTitle
-                ),
+                child:
+                    Text('Should I go fishing?', style: kTextHomeScreenTitle),
               ),
               const SizedBox(
                 height: 14.0,
               ),
               BlocConsumer<WeatherCubit, WeatherState>(
-                listenWhen: (oldState, newState) =>newState is WeatherLoaded || newState is WeatherError,
-                listener: (context, state){
-                  if(state is WeatherLoaded){
+                listenWhen: (oldState, newState) =>
+                    newState is WeatherLoaded || newState is WeatherError,
+                listener: (context, state) {
+                  if (state is WeatherLoaded) {
                     Navigator.pushNamed(context, '/weather');
-                  }
-                  else if (state is WeatherError) {
+                  } else if (state is WeatherError) {
                     Fluttertoast.showToast(
                         msg: state.errorMessage.toString(),
                         gravity: ToastGravity.CENTER);
                     Navigator.pushNamed(context, '/');
                   }
                 },
-                buildWhen: (oldState, newState) => newState is WeatherLoading || newState is WeatherInitial,
-                builder: (context, state){
-                  if(state is WeatherLoading){
+                buildWhen: (oldState, newState) =>
+                    newState is WeatherLoading || newState is WeatherInitial,
+                builder: (context, state) {
+                  if (state is WeatherLoading) {
+                    BlocProvider.of<MyCitiesCubit>(context).loading();
                     return const LoadingScreen();
-                  }return FirstScreen();
+                  }
+                  return FirstScreen();
                 },
               )
             ],

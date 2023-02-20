@@ -3,6 +3,7 @@ import 'package:bloc_final_exame/weather/bloc/my_cities_cubit.dart';
 import 'package:bloc_final_exame/weather/bloc/weather_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../widgets/saved_cities_widget.dart';
 
@@ -50,8 +51,16 @@ class MySavedCities extends StatelessWidget {
                   }
                 },
                 bloc: BlocProvider.of<MyCitiesCubit>(context)..showCitiesList(),
-                buildWhen: (oldState, newState) => newState is MyCitiesLoaded,
+                buildWhen: (oldState, newState) =>
+                    newState is MyCitiesLoaded || newState is MyCitiesLoading,
                 builder: (context, state) {
+                  if (state is MyCitiesLoading) {
+                    return const Center(
+                        child: SpinKitRing(
+                      color: Colors.white,
+                      size: 80.0,
+                    ));
+                  }
                   if (state is MyCitiesLoaded) {
                     return ListView.separated(
                         scrollDirection: Axis.vertical,
@@ -64,7 +73,7 @@ class MySavedCities extends StatelessWidget {
                             },
                             cityName: state.lastCity![index].toString(),
                             onPressed: () {
-                             // Navigator.pushNamed(context, '/saved_city_loading');
+                              // Navigator.pushNamed(context, '/saved_city_loading');
                               BlocProvider.of<WeatherCubit>(context).getWeather(
                                   state.lastCity![index].toString());
                             },
