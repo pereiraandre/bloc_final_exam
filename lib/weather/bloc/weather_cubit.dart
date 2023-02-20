@@ -14,6 +14,11 @@ class WeatherCubit extends Cubit<WeatherState> {
   final WeatherServices weatherServices = WeatherServices.instance;
   final LocalStorage localStorage = LocalStorage();
 
+  void reset() {
+    emit(WeatherInitial());
+  }
+
+
   Future<void> getWeather(String name) async {
     emit(WeatherLoading());
 

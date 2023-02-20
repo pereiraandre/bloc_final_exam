@@ -30,8 +30,7 @@ class MySavedCities extends StatelessWidget {
           ),
           leading: BackButton(
             onPressed: () {
-              //TODO can i just pop?
-              Navigator.pushNamed(context, '/');
+              Navigator.pop(context);
             },
           ),
         ),
@@ -65,8 +64,7 @@ class MySavedCities extends StatelessWidget {
                             },
                             cityName: state.lastCity![index].toString(),
                             onPressed: () {
-                              Navigator.pushNamed(
-                                  context, '/saved_city_loading');
+                             // Navigator.pushNamed(context, '/saved_city_loading');
                               BlocProvider.of<WeatherCubit>(context).getWeather(
                                   state.lastCity![index].toString());
                             },

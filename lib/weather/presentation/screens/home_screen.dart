@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/');
                   }
                 },
-                buildWhen: (oldState, newState) => newState is WeatherLoading,
+                buildWhen: (oldState, newState) => newState is WeatherLoading || newState is WeatherInitial,
                 builder: (context, state){
                   if(state is WeatherLoading){
                     return const LoadingScreen();

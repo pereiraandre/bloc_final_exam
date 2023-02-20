@@ -43,7 +43,8 @@ class WeatherScreen extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       leading: BackButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/');
+                          BlocProvider.of<WeatherCubit>(context).reset();
+                          Navigator.pop(context);
                         },
                         color: darkColor,
                       ),
