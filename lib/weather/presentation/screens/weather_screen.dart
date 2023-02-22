@@ -10,6 +10,8 @@ class WeatherScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    bool isPressed = true;
     void showSnackBar(String message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message),
@@ -58,14 +60,15 @@ class WeatherScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 21.0),
                           child: InkWell(
                             onTap: () {
-                              if (state.isCitySaved?.contains(weather?.name) ??
-                                  false) {
-                                showSnackBar('This city is already saved');
-                              } else {
-                                BlocProvider.of<MyCitiesCubit>(context)
-                                    .addCityToList(weather?.name);
-                                showSnackBar(
-                                    'Your city has been saved successfully');
+                              if (isPressed) {
+                                if (state.isCitySaved?.contains(weather?.name) ?? false) {
+                                  showSnackBar('This city is already saved');
+                                } else {
+                                  BlocProvider.of<MyCitiesCubit>(context)
+                                      .addCityToList(weather?.name);
+                                  showSnackBar('Your city has been saved successfully');
+                                }
+                                isPressed = false;
                               }
                             },
                             splashFactory: InkRipple.splashFactory,
