@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'app_exception.dart';
 
 class NetworkHelper {
@@ -18,13 +19,15 @@ class NetworkHelper {
 
   Future<dynamic> get(String url,
       {Map<String, dynamic>? queryParameters}) async {
-    var responseJson;
+    dynamic responseJson;
     try {
       final response = await dio.get(baseUrl + url + apiKey + unitsMetric,
           queryParameters: queryParameters);
       responseJson = _returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection');
+    } on PlatformException catch (e) {
+      throw FetchDataException('Error communicating with server: ${e.message}');
     } catch (e) {
       throw FetchDataException('Error communicating with server');
     }

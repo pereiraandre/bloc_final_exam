@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_final_exame/weather/provider/data_provider.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:meta/meta.dart';
 import '../data/weather_service.dart';
 import '../models/weather_model.dart';
 import '../presentation/widgets/weather_container_widget.dart';
@@ -17,7 +16,6 @@ class WeatherCubit extends Cubit<WeatherState> {
   void reset() {
     emit(WeatherInitial());
   }
-
 
   Future<void> getWeather(String name) async {
     emit(WeatherLoading());

@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import '../provider/data_provider.dart';
-
 part 'my_cities_state.dart';
 
 class MyCitiesCubit extends Cubit<MyCitiesState> {
