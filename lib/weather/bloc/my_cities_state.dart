@@ -7,7 +7,7 @@ class MyCitiesInitial extends MyCitiesState {}
 class MyCitiesLoading extends MyCitiesState {}
 
 class MyCitiesLoaded extends MyCitiesState {
-  final List<String>? lastCity;
+  final List<String> lastCity;
 
   MyCitiesLoaded(this.lastCity);
 }

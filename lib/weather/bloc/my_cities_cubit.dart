@@ -1,54 +1,44 @@
 import 'package:bloc/bloc.dart';
 import '../provider/data_provider.dart';
+
 part 'my_cities_state.dart';
 
 class MyCitiesCubit extends Cubit<MyCitiesState> {
-  MyCitiesCubit() : super(MyCitiesInitial());
+  final CityDataProvider cityDataProvider;
 
-  final LocalStorage localStorage = LocalStorage();
+  MyCitiesCubit(this.cityDataProvider) : super(MyCitiesInitial());
 
   void reset() async {
-    List<String> lastCity = (await localStorage.getCity('savedCity')) != null
-        ? List<String>.from(await localStorage.getCity('savedCity'))
-        : [];
+    List<String> lastCity =
+        (await cityDataProvider.getCity('savedCity')) != null
+            ? List<String>.from(await cityDataProvider.getCity('savedCity'))
+            : [];
     emit(MyCitiesLoaded(lastCity));
   }
 
-  void loading() {
-    emit(MyCitiesLoading());
-  }
-
   void showCitiesList() async {
+    var getCity = await cityDataProvider.getCity('savedCity');
     try {
-      List<String> savedCity = (await localStorage.getCity('savedCity')) != null
-          ? List<String>.from(await localStorage.getCity('savedCity'))
-          : [];
+      List<String> savedCity =
+          getCity != null ? List<String>.from(getCity) : [];
       emit(MyCitiesLoaded(savedCity));
     } catch (e) {
       emit(MyCitiesError(e.toString()));
     }
   }
 
-  void removeCityFromList(List<String>? list, String name) {
-    List<String>? newList = list;
+  void deleteCity(List<String> list, String name) {
     try {
-      newList?.remove(name);
-      localStorage.setCity("savedCity", newList!);
+      List<String> newList = deleteCityFromStorage(list, name);
       emit(MyCitiesLoaded(newList));
     } catch (e) {
       emit(MyCitiesError(e.toString()));
     }
   }
 
-  void addCityToList(String? name) async {
-    List<String> savedCity = (await localStorage.getCity('savedCity')) != null
-        ? List<String>.from(await localStorage.getCity('savedCity'))
-        : [];
+  void addCity(String? name) async {
     try {
-      if (!savedCity.contains(name)) {
-        savedCity.add(name!);
-        localStorage.setCity('savedCity', savedCity);
-      }
+      addCityToStorage(name);
     } catch (e) {
       emit(MyCitiesError(e.toString()));
     }

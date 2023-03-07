@@ -7,11 +7,16 @@ class WeatherInitial extends WeatherState {}
 class WeatherLoading extends WeatherState {}
 
 class WeatherLoaded extends WeatherState {
-  final List<WeatherResponse>? listWeatherValues;
+  final List<WeatherResponse> listWeatherValues;
   final Weather? weather;
-  final List<String>? isCitySaved;
+  final List<String> savedCityList;
+  final bool isCitySaved;
 
-  WeatherLoaded({this.weather, this.listWeatherValues, this.isCitySaved});
+  WeatherLoaded(
+      {this.weather,
+      required this.listWeatherValues,
+      required this.savedCityList,
+      required this.isCitySaved});
 }
 
 class WeatherError extends WeatherState {

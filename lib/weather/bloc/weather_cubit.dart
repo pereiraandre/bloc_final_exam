@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_final_exame/weather/provider/data_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import '../data/weather_service.dart';
 import '../models/weather_model.dart';
@@ -8,10 +9,11 @@ import '../presentation/widgets/weather_container_widget.dart';
 part 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
-  WeatherCubit() : super(WeatherInitial());
+  final CityDataProvider cityDataProvider;
+
+  WeatherCubit(this.cityDataProvider) : super(WeatherInitial());
 
   final WeatherServices weatherServices = WeatherServices.instance;
-  final LocalStorage localStorage = LocalStorage();
 
   void reset() {
     emit(WeatherInitial());
@@ -28,39 +30,47 @@ class WeatherCubit extends Cubit<WeatherState> {
         final Weather? weather =
             await weatherServices.getCoordinates(lat, long);
 
-        List<String> isCitySaved =
-            (await localStorage.getCity('savedCity')) != null
-                ? List<String>.from(await localStorage.getCity('savedCity'))
+        List<String> savedCityList =
+            (await cityDataProvider.getCity('savedCity')) != null
+                ? List<String>.from(await cityDataProvider.getCity('savedCity'))
                 : [];
 
-        emit(WeatherLoaded(
-            weather: weather,
-            listWeatherValues: populateWeatherList(weather),
-            isCitySaved: isCitySaved));
+        List<WeatherResponse>? finalPopulateWeatherList =
+            populateWeatherList(weather!);
+        bool isCitySaved = savedCityList.contains(weather.name);
+
+        emit(
+          WeatherLoaded(
+              weather: weather,
+              listWeatherValues: finalPopulateWeatherList,
+              savedCityList: savedCityList,
+              isCitySaved: isCitySaved),
+        );
       }
     } catch (e) {
       emit(WeatherError(errorMessage: e.toString()));
+      emit(WeatherInitial());
     }
   }
 
-  List<WeatherResponse> populateWeatherList(Weather? weather) {
+  List<WeatherResponse> populateWeatherList(Weather weather) {
     List<WeatherResponse> listWeatherValues = [
       WeatherResponse(
         titleText: 'Humidity',
-        value: weather?.main.humidity == null
+        value: weather.main.humidity == null
             ? 'No data'
-            : '${weather?.main.humidity?.toInt()}%',
+            : '${weather.main.humidity?.toInt()}%',
       ),
       WeatherResponse(
           titleText: 'Sea Level',
-          value: weather?.main.seaLevel == null
+          value: weather.main.seaLevel == null
               ? 'No data'
-              : '${weather?.main.seaLevel?.toInt()}m'),
+              : '${weather.main.seaLevel?.toInt()}m'),
       WeatherResponse(
           titleText: 'Wind',
-          value: weather?.wind.speed == null
+          value: weather.wind.speed == null
               ? 'No data'
-              : '${weather?.wind.speed?.toInt()}km/h')
+              : '${weather.wind.speed?.toInt()}km/h')
     ];
     return listWeatherValues;
   }

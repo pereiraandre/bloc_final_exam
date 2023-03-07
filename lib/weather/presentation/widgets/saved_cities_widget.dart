@@ -36,26 +36,7 @@ class SavedCitiesContainer extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Confirm Delete'),
-                          content:
-                              Text('Are you sure you want to delete $cityName?'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('Cancel'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('Delete'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                delete();
-                              },
-                            ),
-                          ],
-                        );
+                        return DeleteAlertDialog(cityName: cityName, delete: delete);
                       },
                     );
                   },
@@ -88,6 +69,41 @@ class SavedCitiesContainer extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class DeleteAlertDialog extends StatelessWidget {
+  const DeleteAlertDialog({
+    Key? key,
+    required this.cityName,
+    required this.delete,
+  }) : super(key: key);
+
+  final String cityName;
+  final Function() delete;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Confirm Delete'),
+      content:
+          Text('Are you sure you want to delete $cityName?'),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: const Text('Delete'),
+          onPressed: () {
+            Navigator.of(context).pop();
+            delete();
+          },
+        ),
+      ],
     );
   }
 }

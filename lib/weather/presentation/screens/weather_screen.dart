@@ -1,8 +1,10 @@
 import 'package:bloc_final_exame/weather/bloc/my_cities_cubit.dart';
 import 'package:bloc_final_exame/weather/bloc/weather_cubit.dart';
+import 'package:bloc_final_exame/weather/presentation/widgets/saved_cities_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/constants/constants.dart';
+import '../../../utils/snackBar.dart';
 import '../widgets/weather_container_widget.dart';
 
 class WeatherScreen extends StatelessWidget {
@@ -10,22 +12,14 @@ class WeatherScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isPressed = true;
-    void showSnackBar(String message) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(message),
-        duration: const Duration(seconds: 2),
-      ));
-    }
-
     return BlocBuilder<WeatherCubit, WeatherState>(
-      buildWhen: (oldState, newState) =>
-          newState is WeatherLoading || newState is WeatherLoaded,
+      buildWhen: (oldState, newState) => newState is WeatherLoaded,
       builder: (context, state) {
         if (state is WeatherLoaded) {
           var weather = state.weather;
           var darkColor =
               weather?.isBadWeather ?? false ? Colors.black : Colors.white;
+          bool isCitySaved = state.isCitySaved;
           return Container(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -59,39 +53,56 @@ class WeatherScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(right: 21.0),
                           child: InkWell(
                             onTap: () {
-                              if (isPressed) {
-                                if (state.isCitySaved
-                                        ?.contains(weather?.name) ??
-                                    false) {
-                                  showSnackBar('This city is already saved');
-                                } else {
-                                  BlocProvider.of<MyCitiesCubit>(context)
-                                      .addCityToList(weather?.name);
-                                  showSnackBar(
-                                      'Your city has been saved successfully');
-                                }
-                                isPressed = false;
+                              if (isCitySaved) {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => DeleteAlertDialog(
+                                    cityName: '${weather?.name}',
+                                    delete: () {
+                                      BlocProvider.of<MyCitiesCubit>(context)
+                                          .deleteCity(state.savedCityList,
+                                              '${weather?.name}');
+                                      isCitySaved = false;
+                                    },
+                                  ),
+                                );
+                              } else {
+                                BlocProvider.of<MyCitiesCubit>(context)
+                                    .addCity(weather?.name);
+                                showSnackBar(
+                                    context: context,
+                                    message:
+                                        'Your city has been saved successfully');
+                                isCitySaved = true;
                               }
                             },
                             splashFactory: InkRipple.splashFactory,
-                            highlightColor:
-                                (state.isCitySaved?.contains(weather?.name) ??
-                                        false)
-                                    ? Colors.transparent
-                                    : Colors.green.withOpacity(0.9),
-                            splashColor:
-                                (state.isCitySaved?.contains(weather?.name) ??
-                                        false)
-                                    ? Colors.transparent
-                                    : Colors.green.withOpacity(0.9),
+                            highlightColor: isCitySaved
+                                ? Colors.transparent
+                                : Colors.green.withOpacity(0.9),
+                            splashColor: isCitySaved
+                                ? Colors.transparent
+                                : Colors.green.withOpacity(0.9),
                             customBorder: const CircleBorder(),
-                            child: Icon(
-                              Icons.save,
-                              color:
-                                  (state.isCitySaved?.contains(weather?.name) ??
-                                          false)
-                                      ? Colors.red
-                                      : darkColor,
+                            child: BlocBuilder<MyCitiesCubit, MyCitiesState>(
+                              builder: (context, state) {
+                                BlocProvider.of<MyCitiesCubit>(context)
+                                    .showCitiesList();
+                                if (state is MyCitiesLoaded) {
+                                  if (state.lastCity.contains(weather?.name)) {
+                                    return const Icon(
+                                      Icons.delete,
+                                      color: Colors.redAccent,
+                                    );
+                                  } else {
+                                    return Icon(
+                                      Icons.save,
+                                      color: darkColor,
+                                    );
+                                  }
+                                }
+                                return Container();
+                              },
                             ),
                           ),
                         ),
@@ -125,17 +136,14 @@ class WeatherScreen extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15.0,
-                              right: 15.0,
-                              top: 116.0,
-                              bottom: 116.0),
+                          padding:
+                              const EdgeInsets.only(top: 116.0, bottom: 116.0),
                           child: SizedBox(
                             height: 144.0,
                             child: ListView.separated(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-                              itemCount: state.listWeatherValues?.length ?? 0,
+                              itemCount: state.listWeatherValues.length,
                               separatorBuilder:
                                   (BuildContext context, int index) =>
                                       const SizedBox(
@@ -144,9 +152,9 @@ class WeatherScreen extends StatelessWidget {
                               itemBuilder: (BuildContext context, int index) {
                                 return WeatherResponse(
                                     titleText: state
-                                        .listWeatherValues![index].titleText,
+                                        .listWeatherValues[index].titleText,
                                     value:
-                                        state.listWeatherValues![index].value);
+                                        state.listWeatherValues[index].value);
                               },
                             ),
                           ),
