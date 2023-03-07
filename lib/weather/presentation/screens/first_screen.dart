@@ -1,3 +1,4 @@
+import 'package:bloc_final_exame/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,11 +7,9 @@ import '../widgets/primary_button_widget.dart';
 import '../widgets/text_field_widget.dart';
 
 class FirstScreen extends StatelessWidget {
-  FirstScreen({
-    Key? key,
-  }) : super(key: key);
+  final TextEditingController myController;
 
-  final myController = TextEditingController();
+  const FirstScreen(this.myController, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class FirstScreen extends StatelessWidget {
           const Spacer(),
           TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/saved_city');
+                Navigator.pushNamed(context, RoutePaths.savedCities);
               },
               child: const Text(
                 'My Cities',
@@ -62,6 +61,7 @@ class FirstScreen extends StatelessWidget {
                         gravity: ToastGravity.CENTER)
                     : BlocProvider.of<WeatherCubit>(context)
                         .getWeather(myController.text);
+                myController.clear();
               }),
           const SizedBox(
             height: 47.0,

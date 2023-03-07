@@ -5,18 +5,28 @@ import '../weather/presentation/screens/home_screen.dart';
 import '../weather/presentation/screens/loading_screen.dart';
 import '../weather/presentation/screens/weather_screen.dart';
 
+class RoutePaths {
+  static const String home = '/';
+  static const String weather = '/weather';
+  static const String firstScreen = '/first_screen';
+  static const String loadingScreen = '/loading_screen';
+  static const String savedCities = '/saved_cities';
+}
+
 class AppRouter {
+  final myController = TextEditingController();
+
   Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
-      case '/weather':
+      case RoutePaths.home:
+        return MaterialPageRoute(builder: (_) => HomeScreen());
+      case RoutePaths.weather:
         return MaterialPageRoute(builder: (_) => const WeatherScreen());
-      case '/first_screen':
-        return MaterialPageRoute(builder: (_) => FirstScreen());
-      case '/loading_screen':
+      case RoutePaths.firstScreen:
+        return MaterialPageRoute(builder: (_) => FirstScreen(myController));
+      case RoutePaths.loadingScreen:
         return MaterialPageRoute(builder: (_) => const LoadingScreen());
-      case '/saved_city':
+      case RoutePaths.savedCities:
         return MaterialPageRoute(builder: (_) => const MySavedCities());
       default:
         return null;
