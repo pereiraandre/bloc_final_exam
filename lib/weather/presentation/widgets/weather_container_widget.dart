@@ -10,29 +10,32 @@ class WeatherResponse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 80.0,
-      width: 120.0,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              titleText,
-              overflow: TextOverflow.ellipsis,
-              style: kTextWeatherScreen,
-            ),
-            Text(
-              value,
-              style: kTextWeatherScreen.copyWith(fontWeight: FontWeight.w400),
-            ),
-          ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0),
+      child: Container(
+        height: 80.0,
+        width: 120.0,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                titleText,
+                overflow: TextOverflow.ellipsis,
+                style: kTextWeatherScreen,
+              ),
+              Text(
+                value,
+                style: kTextWeatherScreen.copyWith(fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
         ),
       ),
     );
