@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                       newState is WeatherLoaded || newState is WeatherError,
                   listener: (context, state) {
                     if (state is WeatherLoaded) {
-                      Navigator.pushNamed(context, RoutePaths.weather);
+                      Navigator.pushNamed(context, RoutePaths.weather).then((value) => BlocProvider.of<WeatherCubit>(context).reset());
                     } else if (state is WeatherError) {
                       Fluttertoast.showToast(
                           msg: state.errorMessage.toString(),
